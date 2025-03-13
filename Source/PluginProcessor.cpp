@@ -103,33 +103,39 @@ void Delay2AudioProcessor::releaseResources()
     // spare memory, etc.
 }
 
-#ifndef JucePlugin_PreferredChannelConfigurations
-bool Delay2AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+//#ifndef JucePlugin_PreferredChannelConfigurations
+//bool Delay2AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+//{
+//  #if JucePlugin_IsMidiEffect
+//    juce::ignoreUnused (layouts);
+//    return true;
+//  #else
+//    // This is the place where you check if the layout is supported.
+//    // In this template code we only support mono or stereo.
+//    // Some plugin hosts, such as certain GarageBand versions, will only
+//    // load plugins that support stereo bus layouts.
+//    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
+//     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+//        return false;
+//
+//    // This checks if the input layout matches the output layout
+//   #if ! JucePlugin_IsSynth
+//    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+//        return false;
+//   #endif
+//
+//    return true;
+//  #endif
+//}
+//#endif
+
+bool Delay2AudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
-
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
-
-    return true;
-  #endif
+    // only stereo bus is supported
+    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 }
-#endif
 
-void Delay2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void Delay2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[maybe_unused]] juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -150,11 +156,18 @@ void Delay2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+    
+    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
+        auto* channelData = buffer.getWritePointer(channel);
 
-        // ..do something to the data...
+        // Hundle with Decibel Scale
+        float gainInDecibels = -6.0f;  // gain amount
+
+        float gain = juce::Decibels::decibelsToGain(gainInDecibels);    // convert decibel into linear units
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+            channelData[sample] *= gain;
+        }
     }
 }
 
