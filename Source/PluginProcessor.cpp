@@ -15,10 +15,9 @@ Delay2AudioProcessor::Delay2AudioProcessor() :
         BusesProperties()
         .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
         .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-     )
+    ),
+    params(apvts)
 {
-    auto* param = apvts.getParameter(gainParamID.getParamID());  // call apvts and access this gain parameter
-    gainParam = dynamic_cast<juce::AudioParameterFloat*>(param);
 }
 
 Delay2AudioProcessor::~Delay2AudioProcessor()
@@ -157,10 +156,8 @@ void Delay2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[may
     for (int channel = 0; channel < totalNumInputChannels; ++channel) {
         auto* channelData = buffer.getWritePointer(channel);
 
-        // Hundle with Decibel Scale
-        float gainInDecibels = gainParam->get();  // gain amount
-
-        float gain = juce::Decibels::decibelsToGain(gainInDecibels);    // convert decibel into linear units
+        params.update();
+        float gain = params.gain;
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
             channelData[sample] *= gain;
@@ -186,7 +183,7 @@ void Delay2AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     copyXmlToBinary(*apvts.copyState().createXml(), destData);  // save parameters
-    DBG(apvts.copyState().toXmlString());
+    // DBG(apvts.copyState().toXmlString());
 }
 
 void Delay2AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -204,18 +201,4 @@ void Delay2AudioProcessor::setStateInformation (const void* data, int sizeInByte
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new Delay2AudioProcessor();
-}
-
-
-juce::AudioProcessorValueTreeState::ParameterLayout Delay2AudioProcessor::createParameterLayout()
-{
-    juce::AudioProcessorValueTreeState::ParameterLayout layout;
-
-    layout.add(std::make_unique<juce::AudioParameterFloat>(
-        gainParamID,
-        "Output Gain",
-        juce::NormalisableRange<float>{ -12.0f, 12.0f },
-        0.0f));
-
-    return layout;
 }

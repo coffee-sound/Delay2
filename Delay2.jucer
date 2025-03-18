@@ -6,6 +6,8 @@
               pluginCode="Dlay" cppLanguageStandard="20">
   <MAINGROUP id="G8ylAt" name="Delay2">
     <GROUP id="{84FF974C-2B17-CD7E-F0AC-942B8CF7D740}" name="Source">
+      <FILE id="qEHJfS" name="Parameters.cpp" compile="1" resource="0" file="Source/Parameters.cpp"/>
+      <FILE id="NjGhPy" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="lMaB9g" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="HIfex0" name="PluginProcessor.h" compile="0" resource="0"
