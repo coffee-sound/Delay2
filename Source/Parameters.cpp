@@ -36,8 +36,27 @@ juce::AudioProcessorValueTreeState::ParameterLayout Parameters::createParameterL
     return layout;
 }
 
+void Parameters::prepareToPlay(double sampleRate) noexcept
+{
+    double duration = 0.02; // transition time from the previous parameter value to the new one
+    gainSmoother.reset(sampleRate, duration);
+}
+
+void Parameters::reset() noexcept
+{
+    // to be safe
+    gain = 0.0f;
+    // loads the current parameter value (in other words zero)
+    gainSmoother.setCurrentAndTargetValue(juce::Decibels::decibelsToGain(gainParam->get()));
+}
+
 void Parameters::update() noexcept      // this function won't throw an exception
 {
     // Hundle with Decibel Scale
-    gain = juce::Decibels::decibelsToGain(gainParam->get());  // convert decibel into linear units
+    gainSmoother.setTargetValue(juce::Decibels::decibelsToGain(gainParam->get()));
+}
+
+void Parameters::smoothen() noexcept
+{
+    gain = gainSmoother.getNextValue();
 }

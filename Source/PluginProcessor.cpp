@@ -91,6 +91,8 @@ void Delay2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    params.prepareToPlay(sampleRate);
+    params.reset();
 }
 
 void Delay2AudioProcessor::releaseResources()
@@ -152,17 +154,19 @@ void Delay2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[may
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    
-    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-        auto* channelData = buffer.getWritePointer(channel);
 
-        params.update();
-        float gain = params.gain;
+    params.update();
 
-        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-            channelData[sample] *= gain;
-        }
+    float* channelDataL = buffer.getWritePointer(0);
+    float* channelDataR = buffer.getWritePointer(1);
+
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+        params.smoothen();
+
+        channelDataL[sample] *= params.gain;
+        channelDataR[sample] *= params.gain;
     }
+
 }
 
 //==============================================================================
