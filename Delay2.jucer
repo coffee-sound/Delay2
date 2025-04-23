@@ -5,16 +5,25 @@
               pluginManufacturer="coffee_sound_" pluginManufacturerCode="Cfsd"
               pluginCode="Dlay" cppLanguageStandard="20">
   <MAINGROUP id="G8ylAt" name="Delay2">
+    <GROUP id="{30E6D104-9C65-B98A-AC18-6D91EB8C832B}" name="Assets">
+      <FILE id="jN4uYo" name="Noise.png" compile="0" resource="1" file="../../../../Downloads/getting-started-book/Resources/Noise.png"/>
+      <FILE id="PIOzTV" name="Logo.png" compile="0" resource="1" file="../../../../Downloads/getting-started-book/Resources/Logo.png"/>
+      <FILE id="ntPL5m" name="Lato-Medium.ttf" compile="0" resource="1" file="../../../../Downloads/getting-started-book/Resources/Lato-Medium.ttf"/>
+    </GROUP>
     <GROUP id="{84FF974C-2B17-CD7E-F0AC-942B8CF7D740}" name="Source">
+      <FILE id="WjkbVS" name="LookAndFeel.cpp" compile="1" resource="0" file="Source/LookAndFeel.cpp"/>
+      <FILE id="K5cb7X" name="LookAndFeel.h" compile="0" resource="0" file="Source/LookAndFeel.h"/>
       <FILE id="qEHJfS" name="Parameters.cpp" compile="1" resource="0" file="Source/Parameters.cpp"/>
       <FILE id="NjGhPy" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
+      <FILE id="eB9pQr" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="quNLMW" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="lMaB9g" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="HIfex0" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="eB9pQr" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="quNLMW" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="PT7ox7" name="RotaryKnob.cpp" compile="1" resource="0" file="Source/RotaryKnob.cpp"/>
+      <FILE id="O3pHBH" name="RotaryKnob.h" compile="0" resource="0" file="Source/RotaryKnob.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    Parameters.cpp
-    Created: 18 Mar 2025 12:01:06pm
-    Author:  coffee_sound_
-
-  ==============================================================================
-*/
-
 #include "Parameters.h"
 
 template<typename T>
@@ -31,6 +21,17 @@ static juce::String stringFromMilliseconds(float value, int)
     else {
         return juce::String(value * 0.001f, 2) + " s";
     }
+}
+
+static float millisecondsFromString(const juce::String& text)
+{
+    float value = text.getFloatValue();
+    if (!text.endsWithIgnoreCase("ms")) {
+        if (text.endsWithIgnoreCase("s") || value < Parameters::minDelayTime) {
+            return value * 1000.0f;
+        }
+    }
+    return value;
 }
 
 static juce::String stringFromDecibels(float value, int)
@@ -68,7 +69,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout Parameters::createParameterL
         "Delay Time",
         juce::NormalisableRange<float>{ minDelayTime, maxDelayTime, 0.001f, 0.25f },
         100.0f,
-        juce::AudioParameterFloatAttributes().withStringFromValueFunction(stringFromMilliseconds)
+        juce::AudioParameterFloatAttributes().withStringFromValueFunction(stringFromMilliseconds).withValueFromStringFunction(millisecondsFromString)
     ));
 
     layout.add(std::make_unique<juce::AudioParameterFloat>(

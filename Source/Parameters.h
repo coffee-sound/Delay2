@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    Parameters.h
-    Created: 18 Mar 2025 12:01:06pm
-    Author:  coffee_sound_
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
@@ -45,4 +35,6 @@ private:
 
     float targetDelayTime = 0.0f;
     float coeff = 0.0f;     // one-pole smoothing
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Parameters)
 };
